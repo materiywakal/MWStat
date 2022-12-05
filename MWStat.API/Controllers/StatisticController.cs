@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MWStat.API.BusinessServices.Interfaces;
+using Newtonsoft.Json;
 
 namespace MWStat.API.Controllers
 {
@@ -17,14 +18,6 @@ namespace MWStat.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserInfo(string username)
-        {
-            var result = await instagramService.GetUserInfo(username);
-
-            return Ok(result.Value);
-        }
-
-        [HttpGet]
         public async Task<IActionResult> UpdateFollowersAndFollowing()
         {
             await instagramService.UpdateFollowersAndFollowing();
@@ -33,10 +26,21 @@ namespace MWStat.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetFollowersAndFollowing()
+        public async Task<IActionResult> GetFollowersAndFollowing(DateTime? from, DateTime? to)
         {
+            if (from == null)
+            {
+                from = DateTime.Now.AddYears(-1);
+            }
+            if (to == null)
+            {
+                to = DateTime.Now;
+            }
 
-            return Ok();
+            var result = await instagramService.GetFollowersAndFollowing((DateTime)from, (DateTime)to);
+            var jsonResult = JsonConvert.SerializeObject(result);
+
+            return Ok(jsonResult);
         }
     }
 }

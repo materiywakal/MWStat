@@ -25,6 +25,22 @@ namespace MWStat.API.BusinessServices.Implementations
             return username;
         }
 
+        public async Task<string> GetCurrentUserPk()
+        {
+            var pk = httpContextAccessor.HttpContext.Request.Cookies["pk"];
+            if (pk == null)
+                throw new Exception("redirect to login");
+            return pk;
+        }
+
+        public async Task<string> GetUserPhotoUrl()
+        {
+            var pk = httpContextAccessor.HttpContext.Request.Cookies["pk"];
+            if (pk == null)
+                throw new Exception("redirect to login");
+            return (await unitOfWork.InstagramUser.Get(o => o.Pk == pk)).FirstOrDefault()?.ProfilePicUrl;
+        }
+
         public async Task<InstagramUser> GetCurrentUser()
         {
             var pk = httpContextAccessor.HttpContext.Request.Cookies["pk"];

@@ -35,7 +35,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IInstagramService, InstagramService>();
-builder.Services.AddScoped<IInstagramAuthService, InstagramAuthService>();
+builder.Services.AddScoped<IInstagramAccountService, InstagramAccountService>();
 builder.Services.AddScoped<IInstagramApiBuilder, InstagramApiBuilder>();
 builder.Services.AddScoped<IRepository<InstagramSessionDataDto>, InstagramSessionDataRepository>();
 builder.Services.AddScoped<IRepository<InstagramUserDto>, InstagramUserRepository>();

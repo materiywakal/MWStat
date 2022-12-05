@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   login(){
-    this.http.get(ApiConstants.AUTH_LOGIN+"?username="+this.username+"&password="+this.password)
+    this.http.get(ApiConstants.ACCOUNT_LOGIN+"?username="+this.username+"&password="+this.password)
     .subscribe(result=>{
       console.log(result.headers.keys());
     });

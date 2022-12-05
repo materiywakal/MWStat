@@ -14,6 +14,12 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AppRoutingModule } from "./app-routing.module";
 import { ComponentsModule } from "./components/components.module";
 
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeRu from '@angular/common/locales/ru';
+import localeRuExtra from '@angular/common/locales/extra/ru';
+registerLocaleData(localeRu, 'ru-RU', localeRuExtra);
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -27,7 +33,9 @@ import { ComponentsModule } from "./components/components.module";
     ToastrModule.forRoot()
   ],
   declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent],
-  providers: [],
+  providers: [
+    {provide: LOCALE_ID, useValue: 'ru-RU'}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

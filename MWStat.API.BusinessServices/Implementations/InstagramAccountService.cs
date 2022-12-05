@@ -8,12 +8,12 @@ using MWStat.API.ORM.Interfaces;
 
 namespace MWStat.API.BusinessServices.Implementations
 {
-    public class InstagramAuthService : IInstagramAuthService
+    public class InstagramAccountService : IInstagramAccountService
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public InstagramAuthService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+        public InstagramAccountService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             this.httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
@@ -73,6 +73,6 @@ namespace MWStat.API.BusinessServices.Implementations
             }
             await unitOfWork.InstagramSessionData.Delete(dto);
             await unitOfWork.Save();
-        }
+        }        
     }
 }

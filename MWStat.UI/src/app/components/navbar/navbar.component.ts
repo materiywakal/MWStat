@@ -18,9 +18,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   mobile_menu_visible: any = 0;
   private toggleButton: any;
   private sidebarVisible: boolean;
-  private isLoggedIn: boolean = false;
 
   public isCollapsed = true;
+  public profilePicUrl: string;
 
   closeResult: string;
 
@@ -46,6 +46,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
      }
    };
   ngOnInit() {
+    this.getUserPhoto();
     window.addEventListener("resize", this.updateColor);
     this.listTitles = ROUTES.filter(listTitle => listTitle);
     const navbar: HTMLElement = this.element.nativeElement;
@@ -204,13 +205,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  login()
+  logout()
   {
-    if(this.isLoggedIn) {
-      console.log("loggedIn");
-    } else {
-      this.router.navigate(['/login']);
-    }
+    this.http.get(ApiConstants.ACCOUNT_LOGOUT)
+    .subscribe(result=>{
+      console.log(result);
+    });
+
+    //todo redirect to login
+  }
+
+  getUserPhoto(){
+    this.http.get(ApiConstants.ACCOUNT_GET_USER_PHOTO_URL)
+    .subscribe(result=>{
+      this.profilePicUrl = result.body.url;
+    });
   }
 
   ngOnDestroy(){

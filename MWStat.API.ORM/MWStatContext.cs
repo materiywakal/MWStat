@@ -17,7 +17,7 @@ namespace MWStat.API.ORM
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-EOG6NVT\\MWSERVER;Database=MWStat;Trusted_Connection=True;Encrypt=False;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-EOG6NVT\\MWSERVER;Database=MWStat;Trusted_Connection=True;Encrypt=False;MultipleActiveResultSets=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

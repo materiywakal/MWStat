@@ -1,4 +1,5 @@
 ﻿using MWStat.API.Domain.Dtos;
+using MWStat.API.Domain.Enums;
 using MWStat.API.Domain.Models;
 
 namespace MWStat.API.BusinessServices.Mappers
@@ -22,6 +23,16 @@ namespace MWStat.API.BusinessServices.Mappers
                 InstagramUser = dto.InstagramUser?.Map(),
                 StampDateTime = dto.StampDateTime,
                 LinkedAccounts = list
+            };
+        }
+
+        public static InstagramAccounts MapToInstagramAccounts(this InstagramRunDetailsDto dto)
+        {
+            return new InstagramAccounts
+            {
+                StampDateTime = dto.StampDateTime,
+                FollowersCount = dto.LinkedAccounts.Where(o => o.RelationToUser == RelationToUserEnum.Follower).Count(),
+                FollowingCount = dto.LinkedAccounts.Where(o => o.RelationToUser == RelationToUserEnum.Following).Count()
             };
         }
 

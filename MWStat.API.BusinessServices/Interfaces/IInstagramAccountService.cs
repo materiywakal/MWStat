@@ -2,7 +2,7 @@
 
 namespace MWStat.API.BusinessServices.Interfaces
 {
-    public interface IInstagramAuthService
+    public interface IInstagramAccountService
     {
         Task SaveSessionData(InstagramSessionData stateData);
         Task<InstagramSessionData> LoadSessionData(string pk, string authToken);

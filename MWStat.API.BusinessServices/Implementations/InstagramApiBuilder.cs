@@ -8,9 +8,9 @@ namespace MWStat.API.BusinessServices.Implementations
 {
     public class InstagramApiBuilder : IInstagramApiBuilder
     {
-        private readonly IInstagramAuthService authService;
+        private readonly IInstagramAccountService authService;
         private readonly IHttpContextAccessor httpContextAccessor;
-        public InstagramApiBuilder(IInstagramAuthService authService, IHttpContextAccessor httpContextAccessor)
+        public InstagramApiBuilder(IInstagramAccountService authService, IHttpContextAccessor httpContextAccessor)
         {
             this.authService = authService ?? throw new ArgumentNullException(nameof(authService));
             this.httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));

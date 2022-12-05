@@ -6,6 +6,7 @@ using MWStat.API.BusinessServices.Interfaces;
 using MWStat.API.BusinessServices.Mappers;
 using MWStat.API.Domain.Dtos;
 using MWStat.API.Domain.Enums;
+using MWStat.API.Domain.Models;
 using MWStat.API.ORM.Interfaces;
 
 namespace MWStat.API.BusinessServices.Implementations
@@ -25,14 +26,19 @@ namespace MWStat.API.BusinessServices.Implementations
             this.userHelper = userHelper ?? throw new ArgumentNullException(nameof(userHelper));
         }
 
-        public async Task<IResult<InstaUserInfo>> GetUserInfo(string username)
+        public async Task<IEnumerable<InstagramAccounts>> GetFollowersAndFollowing(DateTime from, DateTime to)
         {
-            if (username == null)
+            var runDetails = await unitOfWork.InstagramRunDetails
+                .Get(o => o.StampDateTime >= from && o.StampDateTime <= to && o.InstagramUser.Pk == userHelper.GetCurrentUserPk().Result);
+
+            var result = new List<InstagramAccounts>();
+
+            foreach(var runDetail in runDetails)
             {
-                var currentUserName = await userHelper.GetCurrentUserName();
-                return await instagramService.UserProcessor.GetUserInfoByUsernameAsync(currentUserName);
+                result.Add(runDetail.MapToInstagramAccounts());
             }
-            return await instagramService.UserProcessor.GetUserInfoByUsernameAsync(username);
+
+            return result;
         }
 
         public async Task UpdateFollowersAndFollowing()
