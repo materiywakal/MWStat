@@ -26,18 +26,20 @@ namespace MWStat.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetFollowersAndFollowing(DateTime? from, DateTime? to)
+        public async Task<IActionResult> GetFollowersAndFollowing(string from, string to)
         {
-            if (from == null)
+            DateTime _from;            
+            DateTime _to;
+            if (!DateTime.TryParse(from, out _from))
             {
-                from = DateTime.Now.AddYears(-1);
+                _from = DateTime.Now.AddYears(-1);
             }
-            if (to == null)
+            if (!DateTime.TryParse(to, out _to))
             {
-                to = DateTime.Now;
+                _to = DateTime.Now;
             }
 
-            var result = await instagramService.GetFollowersAndFollowing((DateTime)from, (DateTime)to);
+            var result = await instagramService.GetFollowersAndFollowing(_from, _to);
             var jsonResult = JsonConvert.SerializeObject(result);
 
             return Ok(jsonResult);

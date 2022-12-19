@@ -1,0 +1,57 @@
+.datepicker {
+    //background-color: #1e1e2e;
+    //border-radius: 10px;
+    color: #ff4081;
+
+
+    .datepicker-toggle {
+        display: inline-block;
+    }
+
+    .datepicker-toggle > button {
+        color: rgba(255, 255, 255, 0.7) !important;
+        background-color: transparent;
+    }
+
+    .datepicker-input {
+        display: inline-block;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .datepicker-input::placeholder, .datepicker-label {
+        color: rgba(255, 255, 255, 0.7);
+    }
+}
+
+.mat-form-field-wrapper {
+    margin: 0;
+    padding: 0;
+}
+
+.mat-form-field-outline, .mat-date-range-input-separator {
+    color: #ff4081 !important;
+}
+
+.mat-form-field-infix {
+    display: flex !important;
+    border: 0 !important;
+    padding: 7px 0 7px 0 !important;
+    position: sticky !important;
+}
+
+.mat-calendar {
+    background-color: #27293d;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.mat-calendar-body-cell-content, .mat-calendar-body-label, .mat-calendar-abbr, .mat-icon-button{
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.mat-calendar-arrow {
+    fill: rgba(255, 255, 255, 0.7) !important;
+}
+
+.mat-icon-button:focus {
+    outline: none !important;
+}

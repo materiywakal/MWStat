@@ -19,4 +19,7 @@ export class HttpWrapper {
     return this.http.get<HttpResponse<any>>(url, this.httpOptions);
   }
 
+  post(url: string, values: any): Observable<HttpResponse<any>>{
+    return this.http.post<HttpResponse<any>>(url, values, this.httpOptions);
+  }
 }

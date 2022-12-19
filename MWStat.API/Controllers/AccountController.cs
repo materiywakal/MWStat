@@ -51,5 +51,15 @@ namespace MWStat.API.Controllers
 
             return Ok(jsonResult);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            var user = await userHelper.GetCurrentUser();
+
+            var jsonResult = JsonConvert.SerializeObject(new {username = user.Username, profilePicUrl = user.ProfilePicUrl});
+
+            return Ok(jsonResult);
+        }
     }
 }

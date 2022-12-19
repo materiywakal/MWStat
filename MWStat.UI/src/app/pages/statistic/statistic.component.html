@@ -1,41 +1,50 @@
 
 <div class=" content">
-  <div class=" row">
-    <div class=" col-12">
+  <div class="row">
+    <div class="col-12">
       <div class=" card card-chart">
         <div class=" card-header">
           <div class=" row">
-            <div class=" col-sm-6 text-left">
-              <h5 class=" card-category">Statistic</h5>
-              <h2 class=" card-title">Accounts</h2>
+            <div class=" col-sm-3 text-left">
+              <h4 class=" card-title">Accounts</h4>
             </div>
-            <div class=" col-sm-6">
-              <div
-                class=" btn-group btn-group-toggle float-right"
-                data-toggle="buttons"
-              >
-                <label class=" btn btn-sm btn-danger btn-simple" (click)="data=datasets[0];updateOptions();clicked=true;clicked1=false;clicked2=false" [ngClass]="{'active':clicked===true}">
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline" class="datepicker">
+                <mat-label class="datepicker-label">Enter a date range</mat-label>
+                <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                  <input matStartDate formControlName="start" placeholder="Start date" class="datepicker-input" (dateChange)="onDateChanged()">
+                  <input matEndDate formControlName="end" placeholder="End date" class="datepicker-input" (dateChange)="onDateChanged()">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker" class="datepicker-toggle"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3" align="center">
+              <div class=" btn-group btn-group-toggle">
+                <label class=" btn btn-sm btn-danger btn-simple active" (click)="updateStatistic();">
+                  <span class=" d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                    Update Statistic
+                  </span>
+                  <span class=" d-block d-sm-none">
+                    <i class=" tim-icons icon-single-02"> </i>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class=" col-sm-3">
+              <div class=" btn-group btn-group-toggle float-right" data-toggle="buttons">
+                <label class=" btn btn-sm btn-danger btn-simple" (click)="data=datasets[0];clicked=true;updateOptions();" [ngClass]="{'active':clicked===true}">
                   <input checked="checked" name="options" type="radio" />
-
-                  <span
-                    class=" d-none d-sm-block d-md-block d-lg-block d-xl-block"
-                  >
+                  <span class=" d-none d-sm-block d-md-block d-lg-block d-xl-block">
                     Followers
                   </span>
                   <span class=" d-block d-sm-none">
                     <i class=" tim-icons icon-single-02"> </i>
                   </span>
                 </label>
-                <label class=" btn btn-sm btn-danger btn-simple" (click)="data=datasets[1];updateOptions();clicked=false;clicked1=true;clicked2=false" [ngClass]="{'active':clicked1===true}">
-                  <input
-                    class=" d-none d-sm-none"
-                    name="options"
-                    type="radio"
-                  />
-
-                  <span
-                    class=" d-none d-sm-block d-md-block d-lg-block d-xl-block"
-                  >
+                <label class=" btn btn-sm btn-danger btn-simple" (click)="data=datasets[1];clicked=false;updateOptions();" [ngClass]="{'active':clicked===false}">
+                  <input class=" d-none d-sm-none" name="options" type="radio"/>
+                  <span class=" d-none d-sm-block d-md-block d-lg-block d-xl-block">
                     Following
                   </span>
                   <span class=" d-block d-sm-none">
@@ -48,6 +57,82 @@
         </div>
         <div class=" card-body">
           <div class=" chart-area"><canvas id="chartBig1"> </canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div class=" card">
+        <div class=" card-header">
+          <h4 class="card-title">{{newTableTitle}}</h4>
+          <h6 class="card-title">{{currentTimeArea}}</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" [hidden]="!checkOnSetLength(firstSubDataset)">
+            <table mat-table [dataSource]="firstSubDataset" class="table tablesorter">
+              <ng-container matColumnDef="profilePic">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                  <div class=" photo">
+                    <img src="{{element.ProfilePicUrl}}" onError="this.src='assets/img/default-avatar.png'"/>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="username">
+                <th mat-header-cell *matHeaderCellDef>Username</th>
+                <td mat-cell *matCellDef="let element">{{element.Username}}</td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
+                <td mat-cell *matCellDef="let element" class="text-center">Unfollow</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [hidePageSize]="true" [pageSize]="10"></mat-paginator>
+          </div>
+          <div [hidden]="checkOnSetLength(firstSubDataset)">
+            <h3 class="text-center">{{newTableEmptyText}}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class=" card">
+        <div class=" card-header">
+          <h4 class="card-title">{{lostTableTitle}}</h4>
+          <h6 class="card-title">{{currentTimeArea}}</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" [hidden]="!checkOnSetLength(secondSubDataset)">
+            <table mat-table [dataSource]="secondSubDataset" class="table tablesorter">
+              <ng-container matColumnDef="profilePic">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                  <div class=" photo">
+                    <img src="{{element.ProfilePicUrl}}" onError="this.src='assets/img/default-avatar.png'"/>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="username">
+                <th mat-header-cell *matHeaderCellDef>Username</th>
+                <td mat-cell *matCellDef="let element">{{element.Username}}</td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
+                <td mat-cell *matCellDef="let element" class="text-center">Unfollow</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [hidePageSize]="true" [pageSize]="10"></mat-paginator>
+          </div>
+          <div [hidden]="checkOnSetLength(secondSubDataset)">
+            <h3 class="text-center">{{lostTableEmptyText}}</h3>
+          </div>
         </div>
       </div>
     </div>

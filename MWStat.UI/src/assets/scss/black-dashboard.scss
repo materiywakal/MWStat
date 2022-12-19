@@ -63,6 +63,8 @@
  // Custom components
 
  @import "black-dashboard/custom/alerts.scss";
+ @import "black-dashboard/custom/paginator.scss";
+ @import "black-dashboard/custom/datepicker.scss";
  @import "black-dashboard/custom/buttons.scss";
  @import "black-dashboard/custom/dropdown.scss";
  @import "black-dashboard/custom/footer.scss";
@@ -100,4 +102,6 @@
 
 // Angular Differences
 
-@import "black-dashboard/angular-differences/angular-differences"
+@import "black-dashboard/angular-differences/angular-differences";
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";

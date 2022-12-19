@@ -5387,7 +5387,8 @@ input[type="button"].btn-block {
 
 .alert-info {
   color: #1d8cf8;
-  background-color: #419ef9;
+  background-color: #ec250d !important;
+  background-image: linear-gradient(to bottom left, #fd5d93, #ec250d, #fd5d93) !important;
   border-color: #419ef9;
 }
 

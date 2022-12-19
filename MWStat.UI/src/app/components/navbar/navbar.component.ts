@@ -21,6 +21,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   public isCollapsed = true;
   public profilePicUrl: string;
+  public username: string;
 
   closeResult: string;
 
@@ -46,7 +47,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
      }
    };
   ngOnInit() {
-    this.getUserPhoto();
+    this.getUserInfo();
     window.addEventListener("resize", this.updateColor);
     this.listTitles = ROUTES.filter(listTitle => listTitle);
     const navbar: HTMLElement = this.element.nativeElement;
@@ -197,14 +198,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  handshakeBackend()
-  {
-
-    this.http.get(ApiConstants.STATISTIC_UPDATE_FOLLOWERS_AND_FOLLOWING).subscribe(result=>{
-      console.log(result);
-    });
-  }
-
   logout()
   {
     this.http.get(ApiConstants.ACCOUNT_LOGOUT)
@@ -215,10 +208,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     //todo redirect to login
   }
 
-  getUserPhoto(){
-    this.http.get(ApiConstants.ACCOUNT_GET_USER_PHOTO_URL)
+  getUserInfo(){
+    this.http.get(ApiConstants.ACCOUNT_GET_USER_INFO)
     .subscribe(result=>{
-      this.profilePicUrl = result.body.url;
+      this.profilePicUrl = result.body.profilePicUrl;
+      this.username = result.body.username;
     });
   }
 

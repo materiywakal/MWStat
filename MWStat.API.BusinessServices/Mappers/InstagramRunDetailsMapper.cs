@@ -28,11 +28,24 @@ namespace MWStat.API.BusinessServices.Mappers
 
         public static InstagramAccounts MapToInstagramAccounts(this InstagramRunDetailsDto dto)
         {
+            var relations = dto.LinkedAccounts.Where(o => o.RelationToUser == RelationToUserEnum.NewFollower || o.RelationToUser == RelationToUserEnum.LostFollower
+                || o.RelationToUser == RelationToUserEnum.NewFollowing || o.RelationToUser == RelationToUserEnum.LostFollowing);
+            var accounts = new List<InstagramAccount>();
+            foreach (var account in relations)
+            {
+                accounts.Add(new InstagramAccount
+                {
+                    Username = account.InstagramUser.Username,
+                    ProfilePicUrl = account.InstagramUser.ProfilePicUrl,
+                    Relation = account.RelationToUser
+                });
+            }
             return new InstagramAccounts
             {
                 StampDateTime = dto.StampDateTime,
                 FollowersCount = dto.LinkedAccounts.Where(o => o.RelationToUser == RelationToUserEnum.Follower).Count(),
-                FollowingCount = dto.LinkedAccounts.Where(o => o.RelationToUser == RelationToUserEnum.Following).Count()
+                FollowingCount = dto.LinkedAccounts.Where(o => o.RelationToUser == RelationToUserEnum.Following).Count(),
+                Accounts = accounts
             };
         }
 

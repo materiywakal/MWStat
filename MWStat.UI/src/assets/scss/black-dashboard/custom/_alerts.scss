@@ -1,6 +1,7 @@
 .alert{
     border: 0;
     color: $white;
+    background-image: linear-gradient(to bottom left, #fd5d93, #f8432f, #fd5d93) !important;
 
     .alert-link{
       color: $white;
