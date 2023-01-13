@@ -1,3 +1,4 @@
+import { AboutComponent } from './../../pages/about/about.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -14,7 +15,6 @@ import { StatisticComponent } from "src/app/pages/statistic/statistic.component"
 import { IconsComponent } from "../../pages/icons/icons.component";
 import { TablesComponent } from "../../pages/tables/tables.component";
 import { TypographyComponent } from "../../pages/typography/typography.component";
-import { LoginComponent } from "src/app/pages/login/login.component";
 
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,7 +39,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     TablesComponent,
     IconsComponent,
     TypographyComponent,
-    LoginComponent
+    AboutComponent
   ],
   providers: [
     CdkColumnDef,

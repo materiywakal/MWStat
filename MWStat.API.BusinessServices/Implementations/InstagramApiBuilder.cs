@@ -27,7 +27,7 @@ namespace MWStat.API.BusinessServices.Implementations
 
                 if (sessionData == null)
                 {
-                    throw new Exception("SessionData not found in db");
+                    throw new Exception("SessionData not found in db.");
                 }
 
                 var api = InstaApiBuilder.CreateBuilder()
@@ -39,7 +39,7 @@ namespace MWStat.API.BusinessServices.Implementations
                 return api;
             }
 
-            throw new Exception("redirect to login");
+            throw new Exception("Login first.");
         }
     }
 }

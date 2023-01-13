@@ -16,29 +16,12 @@ namespace MWStat.API.BusinessServices.Implementations
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
-        public async Task<string> GetCurrentUserName()
+        public async Task<long> GetCurrentUserPk()
         {
             var pk = httpContextAccessor.HttpContext.Request.Cookies["pk"];
             if (pk == null)
                 throw new Exception("redirect to login");
-            var username = (await unitOfWork.InstagramUser.Get(x => x.Pk == pk)).FirstOrDefault().Username;
-            return username;
-        }
-
-        public async Task<string> GetCurrentUserPk()
-        {
-            var pk = httpContextAccessor.HttpContext.Request.Cookies["pk"];
-            if (pk == null)
-                throw new Exception("redirect to login");
-            return pk;
-        }
-
-        public async Task<string> GetUserPhotoUrl()
-        {
-            var pk = httpContextAccessor.HttpContext.Request.Cookies["pk"];
-            if (pk == null)
-                throw new Exception("redirect to login");
-            return (await unitOfWork.InstagramUser.Get(o => o.Pk == pk)).FirstOrDefault()?.ProfilePicUrl;
+            return long.Parse(pk);
         }
 
         public async Task<InstagramUser> GetCurrentUser()
@@ -47,9 +30,9 @@ namespace MWStat.API.BusinessServices.Implementations
             if (pk == null)
                 throw new Exception("redirect to login");
 
-            var dto = (await unitOfWork.InstagramUser.Get(x => x.Pk == pk)).FirstOrDefault();
+            var dto = (await unitOfWork.InstagramUser.Get(x => x.Id == long.Parse(pk))).FirstOrDefault();
 
-            return dto.Map();
+            return dto?.Map();
         }
     }
 }

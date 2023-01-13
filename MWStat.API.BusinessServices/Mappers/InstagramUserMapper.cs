@@ -11,7 +11,6 @@ namespace MWStat.API.BusinessServices.Mappers
             {
                 Id = dto.Id,
                 Username = dto.Username,
-                Pk = dto.Pk,
                 ProfilePicUrl = dto.ProfilePicUrl
             };
         }
@@ -22,7 +21,6 @@ namespace MWStat.API.BusinessServices.Mappers
             {
                 Id = model.Id,
                 Username = model.Username,
-                Pk = model.Pk,
                 ProfilePicUrl = model.ProfilePicUrl
             };
         }

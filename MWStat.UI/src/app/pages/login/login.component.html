@@ -1,45 +1,55 @@
-<div class=" content">
-    <div class=" row">
-      <div class=" col-md-4">
-        <div class=" card">
-          <div class=" card-header"><h5 class=" title">Login</h5></div>
-          <div class=" card-body">
-            <form (ngSubmit)="login()">
-              <div class=" row">
-                <div class=" col-md-8 pr-md-1">
-                  <div class=" form-group">
-                    <label> Username </label>
-                    <input
-                      id="username"
-                      [(ngModel)]="username"
-                      class=" form-control"
-                      placeholder="Username"
-                      type="text"
-                    />
-                  </div>
+<div class="content">
+    <div class=" row" style="margin-top: 10%">
+      <div class="col-md-5"></div>
+      <div class="col-md-2 card">
+        <div class="card-header text-center">
+          <img src="assets/img/instagram-logo-text.png" class="img-fluid" style="max-height: 120px;">
+        </div>
+        <div class=" card-body">
+          <form (ngSubmit)="login()">
+            <div class=" row">
+              <div class="col-md-2"></div>
+              <div class=" col-md-8">
+                <div class=" form-group">
+                  <label> Username </label>
+                  <input
+                    id="username"
+                    [(ngModel)]="username"
+                    class=" form-control"
+                    placeholder="Username"
+                    type="text"
+                  />
                 </div>
               </div>
-              <div class=" row">
-                <div class=" col-md-8 pr-md-1">
-                  <div class=" form-group">
-                    <label> Password </label>
-                    <input
-                      id="password"
-                      [(ngModel)]="password"
-                      class=" form-control"
-                      placeholder="Password"
-                      type="password"
-                    />
-                  </div>
+            </div>
+            <div class=" row">
+              <div class="col-md-2"></div>
+              <div class=" col-md-8">
+                <div class=" form-group">
+                  <label> Password </label>
+                  <input
+                    id="password"
+                    [(ngModel)]="password"
+                    class=" form-control"
+                    placeholder="Password"
+                    type="password"
+                  />
                 </div>
               </div>
-              <div class=" card-footer">
-                <button class=" btn btn-fill btn-danger" type="submit">Login</button>
+            </div>
+            <div class=" card-footer">
+              <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 text-center">
+                  <button class=" btn btn-fill btn-danger" type="submit">Login</button>
+                </div>
+                <div class="col-md-2"></div>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
+      <div class="col-md-5"></div>
     </div>
   </div>
   

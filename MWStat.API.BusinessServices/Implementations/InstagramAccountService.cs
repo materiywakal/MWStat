@@ -24,13 +24,20 @@ namespace MWStat.API.BusinessServices.Implementations
             var dto = stateData.Map();
             await unitOfWork.InstagramUser.Create(dto.InstagramUser);
             await unitOfWork.InstagramSessionData.Create(dto);
-            await unitOfWork.Save();
+            try
+            {
+                await unitOfWork.Save();
+            } 
+            catch(Exception e)
+            {
+                var b = e;
+            }
         }
 
         public async Task<InstagramSessionData> LoadSessionData(string pk, string authToken)
         {
-            var dto = (await unitOfWork.InstagramSessionData.Get(x => x.InstagramUser.Pk == pk && x.AuthToken == authToken)).FirstOrDefault();
-            var model = dto.Map();
+            var dto = (await unitOfWork.InstagramSessionData.Get(x => x.InstagramUser.Id == long.Parse(pk) && x.AuthToken == authToken)).FirstOrDefault();
+            var model = dto?.Map();
             return model;
         }
 
@@ -50,7 +57,7 @@ namespace MWStat.API.BusinessServices.Implementations
             {
                 InstagramUser = new InstagramUser 
                 {
-                    Pk = user.LoggedInUser.Pk.ToString(), 
+                    Id = user.LoggedInUser.Pk, 
                     Username = user.UserName,
                     ProfilePicUrl = user.LoggedInUser.ProfilePicUrl
                 },
@@ -60,13 +67,13 @@ namespace MWStat.API.BusinessServices.Implementations
 
             await SaveSessionData(sessionData);
 
-            httpContextAccessor.HttpContext.Response.Cookies.Append("pk", sessionData.InstagramUser.Pk, new CookieOptions { Expires = DateTime.Now.AddYears(1), Secure = true });
+            httpContextAccessor.HttpContext.Response.Cookies.Append("pk", sessionData.InstagramUser.Id.ToString(), new CookieOptions { Expires = DateTime.Now.AddYears(1), Secure = true });
             httpContextAccessor.HttpContext.Response.Cookies.Append("authToken", sessionData.AuthToken, new CookieOptions { Expires = DateTime.Now.AddYears(1), Secure = true });
         }
 
         public async Task DeleteSessionData(string pk, string authToken)
         {
-            var dto = (await unitOfWork.InstagramSessionData.Get(x => x.InstagramUser.Pk == pk && x.AuthToken == authToken)).FirstOrDefault();
+            var dto = (await unitOfWork.InstagramSessionData.Get(x => x.InstagramUser.Id == long.Parse(pk) && x.AuthToken == authToken)).FirstOrDefault();
             if (dto == null)
             {
                 throw new Exception("No session data found?");

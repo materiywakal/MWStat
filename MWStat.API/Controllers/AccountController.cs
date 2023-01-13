@@ -8,13 +8,11 @@ namespace MWStat.API.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : ControllerBase
     {
-        private readonly ILogger<StatisticController> logger;
         private readonly IInstagramAccountService instagramAuthService;
         private readonly IUserHelper userHelper;
 
-        public AccountController(ILogger<StatisticController> logger, IInstagramAccountService instagramAuthService, IUserHelper userHelper)
+        public AccountController(IInstagramAccountService instagramAuthService, IUserHelper userHelper)
         {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.instagramAuthService = instagramAuthService ?? throw new ArgumentNullException(nameof(instagramAuthService));
             this.userHelper = userHelper ?? throw new ArgumentNullException(nameof(userHelper));
         }
@@ -43,19 +41,13 @@ namespace MWStat.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserPhotoUrl()
-        {
-            var profilePicUrl = await userHelper.GetUserPhotoUrl();
-
-            var jsonResult = JsonConvert.SerializeObject(new { url = profilePicUrl });
-
-            return Ok(jsonResult);
-        }
-
-        [HttpGet]
         public async Task<IActionResult> GetUserInfo()
         {
             var user = await userHelper.GetCurrentUser();
+            if(user == null)
+            {
+                return BadRequest("User is not logged in");
+            }
 
             var jsonResult = JsonConvert.SerializeObject(new {username = user.Username, profilePicUrl = user.ProfilePicUrl});
 

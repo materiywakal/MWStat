@@ -218,6 +218,11 @@
     }
 }
 
+.image-container img {
+  max-width: 300px;
+  max-height: 300px;
+}
+
 .card-body{
   padding: $card-spacer-y;
 }

@@ -8,12 +8,10 @@ namespace MWStat.API.Controllers
     [Route("[controller]/[action]")]
     public class StatisticController : ControllerBase
     {
-        private readonly ILogger<StatisticController> logger;
         private readonly IInstagramService instagramService;
 
-        public StatisticController(ILogger<StatisticController> logger, IInstagramService instagramService)
+        public StatisticController(IInstagramService instagramService)
         {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.instagramService = instagramService ?? throw new ArgumentNullException(nameof(instagramService));
         }
 
@@ -39,10 +37,17 @@ namespace MWStat.API.Controllers
                 _to = DateTime.Now;
             }
 
-            var result = await instagramService.GetFollowersAndFollowing(_from, _to);
-            var jsonResult = JsonConvert.SerializeObject(result);
+            try
+            {
+                var result = await instagramService.GetFollowersAndFollowing(_from, _to);
+                var jsonResult = JsonConvert.SerializeObject(result);
 
-            return Ok(jsonResult);
+                return Ok(jsonResult);
+            }
+            catch
+            {
+                return BadRequest("Error occured.");
+            }
         }
     }
 }

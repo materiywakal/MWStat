@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using MWStat.API.Domain.Dtos;
 using MWStat.API.ORM.Interfaces;
 using System.Linq.Expressions;
@@ -8,9 +9,12 @@ namespace MWStat.API.ORM.Implementations
     public class InstagramUserRepository : IRepository<InstagramUserDto>
     {
         private readonly DbSet<InstagramUserDto> dbSet;
+        private readonly DatabaseFacade database;
+
         public InstagramUserRepository(MWStatContext context)
         {
             dbSet = context.InstagramUser;
+            database = context.Database;
         }
         public async Task<IEnumerable<InstagramUserDto>> Get(Expression<Func<InstagramUserDto, bool>> filter)
         {
@@ -23,7 +27,6 @@ namespace MWStat.API.ORM.Implementations
         public async Task Create(InstagramUserDto entity)
         {
             dbSet.Entry(entity).State = EntityState.Modified;
-
             await dbSet.AddAsync(entity);
         }
         public async Task Update(InstagramUserDto entity)

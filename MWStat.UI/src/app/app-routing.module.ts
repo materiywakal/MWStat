@@ -1,3 +1,4 @@
+import { LoginComponent } from 'src/app/pages/login/login.component';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BrowserModule } from "@angular/platform-browser";
@@ -20,6 +21,10 @@ const routes: Routes = [
         loadChildren: () => import ("./layouts/admin-layout/admin-layout.module").then(m => m.AdminLayoutModule)
       }
     ]
+  },
+  {
+    path: "login",
+    component: LoginComponent
   }
 ];
 

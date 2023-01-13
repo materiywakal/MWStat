@@ -202,10 +202,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   {
     this.http.get(ApiConstants.ACCOUNT_LOGOUT)
     .subscribe(result=>{
-      console.log(result);
+      this.router.navigate(['/login']);
     });
-
-    //todo redirect to login
   }
 
   getUserInfo(){

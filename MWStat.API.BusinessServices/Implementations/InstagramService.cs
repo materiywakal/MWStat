@@ -1,7 +1,5 @@
 ﻿using InstagramApiSharp;
 using InstagramApiSharp.API;
-using InstagramApiSharp.Classes;
-using InstagramApiSharp.Classes.Models;
 using MWStat.API.BusinessServices.Interfaces;
 using MWStat.API.BusinessServices.Mappers;
 using MWStat.API.Domain.Dtos;
@@ -29,7 +27,7 @@ namespace MWStat.API.BusinessServices.Implementations
         public async Task<IEnumerable<InstagramAccounts>> GetFollowersAndFollowing(DateTime from, DateTime to)
         {
             var runDetails = await unitOfWork.InstagramRunDetails
-                .Get(o => o.StampDateTime >= from && o.StampDateTime <= to && o.InstagramUser.Pk == userHelper.GetCurrentUserPk().Result);
+                .Get(o => o.StampDateTime >= from && o.StampDateTime <= to && o.InstagramUser.Id == userHelper.GetCurrentUserPk().Result);
 
             var result = new List<InstagramAccounts>();
 
@@ -45,7 +43,7 @@ namespace MWStat.API.BusinessServices.Implementations
         {
             var runDetails = await GetCurrentFollowersAndFollowing();
 
-            var recentRunDetails = (await unitOfWork.InstagramRunDetails.Get(o => o.InstagramUser.Pk == runDetails.InstagramUser.Pk))
+            var recentRunDetails = (await unitOfWork.InstagramRunDetails.Get(o => o.InstagramUser.Id == runDetails.InstagramUser.Id))
                 .OrderByDescending(o => o.StampDateTime).FirstOrDefault();
 
             if(recentRunDetails != null)
@@ -66,18 +64,18 @@ namespace MWStat.API.BusinessServices.Implementations
                 .Get(o => o.InstagramUser.Username == runDetails.InstagramUser.Username && o.StampDateTime == runDetails.StampDateTime))
                 .FirstOrDefault().Map();
 
-            var users = new List<string>();
+            var users = new List<long>();
             foreach(var i in runToUser)
             {
-                users.Add(i.InstagramUser.Pk);
+                users.Add(i.InstagramUser.Id);
             }
 
-            var existingUsers = await unitOfWork.InstagramUser.Get(o => users.Contains(o.Pk));
+            var existingUsers = await unitOfWork.InstagramUser.Get(o => users.Contains(o.Id));
 
             foreach (var entity in runToUser)
             {
                 entity.InstagramRunDetailsId = dbRunDetails.Id;
-                var user = existingUsers.FirstOrDefault(o => o.Pk == entity.InstagramUser.Pk);
+                var user = existingUsers.FirstOrDefault(o => o.Id == entity.InstagramUser.Id);
                 if (user != null)
                 {
                     entity.InstagramUser = null;
@@ -102,7 +100,7 @@ namespace MWStat.API.BusinessServices.Implementations
             {
                 var account = new InstagramUserDto
                 {
-                    Pk = f.Pk.ToString(),
+                    Id = f.Pk,
                     Username = f.UserName,
                     ProfilePicUrl = f.ProfilePicUrl
                 };
@@ -121,7 +119,7 @@ namespace MWStat.API.BusinessServices.Implementations
             {
                 var account = new InstagramUserDto
                 {
-                    Pk = f.Pk.ToString(),
+                    Id = f.Pk,
                     Username = f.UserName,
                     ProfilePicUrl = f.ProfilePicUrl
                 };
@@ -147,7 +145,7 @@ namespace MWStat.API.BusinessServices.Implementations
             foreach (var detailsToUser in runDetailsFollowers)
             {
                 if (recentRunDetails.LinkedAccounts
-                    .FirstOrDefault(o => o.RelationToUser == RelationToUserEnum.Follower && o.InstagramUser.Pk == detailsToUser.InstagramUser.Pk) == null)
+                    .FirstOrDefault(o => o.RelationToUser == RelationToUserEnum.Follower && o.InstagramUser.Id == detailsToUser.InstagramUser.Id) == null)
                 {
                     runDetails.LinkedAccounts.Add(new InstagramRunDetailsToInstagramUserDto
                     {
@@ -161,7 +159,7 @@ namespace MWStat.API.BusinessServices.Implementations
             foreach (var detailsToUser in recentRunDetailsFollowers)
             {
                 if (runDetails.LinkedAccounts
-                    .FirstOrDefault(o => o.RelationToUser == RelationToUserEnum.Follower && o.InstagramUser.Pk == detailsToUser.InstagramUser.Pk) == null)
+                    .FirstOrDefault(o => o.RelationToUser == RelationToUserEnum.Follower && o.InstagramUser.Id == detailsToUser.InstagramUser.Id) == null)
                 {
                     runDetails.LinkedAccounts.Add(new InstagramRunDetailsToInstagramUserDto
                     {
@@ -178,7 +176,7 @@ namespace MWStat.API.BusinessServices.Implementations
             foreach (var detailsToUser in runDetailsFollowing)
             {
                 if (recentRunDetails.LinkedAccounts
-                    .FirstOrDefault(o => o.RelationToUser == RelationToUserEnum.Following && o.InstagramUser.Pk == detailsToUser.InstagramUser.Pk) == null)
+                    .FirstOrDefault(o => o.RelationToUser == RelationToUserEnum.Following && o.InstagramUser.Id == detailsToUser.InstagramUser.Id) == null)
                 {
                     runDetails.LinkedAccounts.Add(new InstagramRunDetailsToInstagramUserDto
                     {
@@ -192,7 +190,7 @@ namespace MWStat.API.BusinessServices.Implementations
             foreach (var detailsToUser in recentRunDetailsFollowing)
             {
                 if (runDetails.LinkedAccounts
-                    .FirstOrDefault(o => o.RelationToUser == RelationToUserEnum.Following && o.InstagramUser.Pk == detailsToUser.InstagramUser.Pk) == null)
+                    .FirstOrDefault(o => o.RelationToUser == RelationToUserEnum.Following && o.InstagramUser.Id == detailsToUser.InstagramUser.Id) == null)
                 {
                     runDetails.LinkedAccounts.Add(new InstagramRunDetailsToInstagramUserDto
                     {
@@ -208,6 +206,24 @@ namespace MWStat.API.BusinessServices.Implementations
                 return Task.FromResult(runDetails);
             }
             return Task.FromResult(new InstagramRunDetailsDto());
+        }
+
+        public async Task FollowUser(long pk)
+        {
+            var result = await instagramService.UserProcessor.FollowUserAsync(pk);
+            if(!result.Succeeded)
+            {
+                throw new Exception("Unable to follow user.");
+            }
+        }
+
+        public async Task UnfollowUser(long pk)
+        {
+            var result = await instagramService.UserProcessor.UnFollowUserAsync(pk);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Unable to unfollow user.");
+            }
         }
     }
 }

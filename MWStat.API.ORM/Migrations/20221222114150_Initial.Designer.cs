@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MWStat.API.ORM.Migrations
 {
     [DbContext(typeof(MWStatContext))]
-    [Migration("20221122185340_Initial")]
+    [Migration("20221222114150_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -36,8 +36,8 @@ namespace MWStat.API.ORM.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("InstagramUserId")
-                        .HasColumnType("int");
+                    b.Property<long>("InstagramUserId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("StampDateTime")
                         .HasColumnType("datetime2");
@@ -60,8 +60,8 @@ namespace MWStat.API.ORM.Migrations
                     b.Property<int>("InstagramRunDetailsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("InstagramUserId")
-                        .HasColumnType("int");
+                    b.Property<long>("InstagramUserId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("RelationToUser")
                         .HasColumnType("int");
@@ -86,8 +86,8 @@ namespace MWStat.API.ORM.Migrations
                     b.Property<string>("AuthToken")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InstagramUserId")
-                        .HasColumnType("int");
+                    b.Property<long>("InstagramUserId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("SessionData")
                         .HasColumnType("nvarchar(max)");
@@ -101,14 +101,8 @@ namespace MWStat.API.ORM.Migrations
 
             modelBuilder.Entity("MWStat.API.Domain.Dtos.InstagramUserDto", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Pk")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("ProfilePicUrl")
                         .HasColumnType("nvarchar(max)");

@@ -35,6 +35,7 @@ namespace MWStat.API.BusinessServices.Mappers
             {
                 accounts.Add(new InstagramAccount
                 {
+                    Id = account.InstagramUser.Id,
                     Username = account.InstagramUser.Username,
                     ProfilePicUrl = account.InstagramUser.ProfilePicUrl,
                     Relation = account.RelationToUser

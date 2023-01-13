@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { formatDate } from "@angular/common";
 import { Component, OnInit, QueryList, ViewChildren } from "@angular/core";
@@ -8,7 +9,6 @@ import { ApiConstants } from "src/app/constants/api.constants";
 import { HttpWrapper } from "src/app/services/httpWrapper.service";
 import { Notification } from 'src/app/services/notification.service';
 import { HttpResponse } from '@angular/common/http';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -47,12 +47,14 @@ export class StatisticComponent implements OnInit {
   });
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
 
-  constructor(private http: HttpWrapper, private notification: Notification) {}
+  constructor(private http: HttpWrapper, private notification: Notification, private router: Router) {}
 
   ngOnInit() {
     this.request = this.http.get(ApiConstants.STATISTIC_GET_FOLLOWERS_AND_FOLLOWING);
     this.request.subscribe(result => {
       this.updateChart(result);
+    }, error=>{
+      this.router.navigate(['/login']);
     });
   }
 
@@ -67,6 +69,7 @@ export class StatisticComponent implements OnInit {
     this.myChartData.data.datasets[0].data = this.data;
     if(this.clicked) {
       this.myChartData.options.scales.yAxes[0].ticks.suggestedMax = this.maxFollowers;
+      this.myChartData.options.scales.yAxes[0].ticks.suggestedMin = this.minFollowers;
       this.myChartData.data.datasets[0].label = 'Followers';
       this.newTableTitle = 'New Followers';
       this.lostTableTitle = 'Lost Followers';
@@ -74,6 +77,7 @@ export class StatisticComponent implements OnInit {
       this.lostTableEmptyText = 'No lost Followers';
     } else {
       this.myChartData.options.scales.yAxes[0].ticks.suggestedMax = this.maxFollowing;
+      this.myChartData.options.scales.yAxes[0].ticks.suggestedMin = this.minFollowing;
       this.myChartData.data.datasets[0].label = 'Following';
       this.newTableTitle = 'New Followings';
       this.lostTableTitle = 'Lost Followings';
@@ -96,14 +100,19 @@ export class StatisticComponent implements OnInit {
   }
 
   public checkOnSetLength(source: MatTableDataSource<any[][]>){
-    if(source)
+    if(!source)
+    {      
+      return false;
+    }
+    if(!source.data)
     {
-      if(source.data.length > 0) {
-        return true;
-      }
-      else {
-        return false;
-      }
+      return false;
+    }
+    if(source.data.length > 0) {
+      return true;
+    }
+    else {
+      return false;
     }
   }
 
@@ -165,13 +174,13 @@ export class StatisticComponent implements OnInit {
 
       for(var i: number = 0; i < element.Accounts.length; i++) {
         if(element.Accounts[i].Relation == ApiConstants.RELATION_TYPE.NewFollower)
-          this.newFollowersDataset[counter].push({Username: element.Accounts[i].Username, ProfilePicUrl: element.Accounts[i].ProfilePicUrl});
+          this.newFollowersDataset[counter].push({Username: element.Accounts[i].Username, ProfilePicUrl: element.Accounts[i].ProfilePicUrl, Pk: element.Accounts[i].Id});
         if(element.Accounts[i].Relation == ApiConstants.RELATION_TYPE.LostFollower)
-          this.lostFollowersDataset[counter].push({Username: element.Accounts[i].Username, ProfilePicUrl: element.Accounts[i].ProfilePicUrl});
+          this.lostFollowersDataset[counter].push({Username: element.Accounts[i].Username, ProfilePicUrl: element.Accounts[i].ProfilePicUrl, Pk: element.Accounts[i].Id});
         if(element.Accounts[i].Relation == ApiConstants.RELATION_TYPE.NewFollowing)
-          this.newFollowingsDataset[counter].push({Username: element.Accounts[i].Username, ProfilePicUrl: element.Accounts[i].ProfilePicUrl});
+          this.newFollowingsDataset[counter].push({Username: element.Accounts[i].Username, ProfilePicUrl: element.Accounts[i].ProfilePicUrl, Pk: element.Accounts[i].Id});
         if(element.Accounts[i].Relation == ApiConstants.RELATION_TYPE.LostFollowing)
-          this.lostFollowingsDataset[counter].push({Username: element.Accounts[i].Username, ProfilePicUrl: element.Accounts[i].ProfilePicUrl});
+          this.lostFollowingsDataset[counter].push({Username: element.Accounts[i].Username, ProfilePicUrl: element.Accounts[i].ProfilePicUrl, Pk: element.Accounts[i].Id});
       }
 
       if(this.minFollowers > element.FollowersCount)
@@ -210,7 +219,7 @@ export class StatisticComponent implements OnInit {
             zeroLineColor: "transparent",
           },
           ticks: {
-            suggestedMin: 0,
+            suggestedMin: this.minFollowers,
             suggestedMax: this.maxFollowers,
             padding: 20,
             fontColor: "#9a9a9a",
@@ -277,6 +286,21 @@ export class StatisticComponent implements OnInit {
   public updateStatistic(){
     this.http.get(ApiConstants.STATISTIC_UPDATE_FOLLOWERS_AND_FOLLOWING).subscribe(result=>{
       this.notification.showNotification('Data successfully updated.');
+      this.onDateChanged();
+    });
+  }
+
+  public follow(pk)
+  {
+    this.http.get(ApiConstants.PROFILE_INTERACTION_FOLLOW + '?pk=' + pk).subscribe(result=>{
+      this.notification.showNotification('Sucessfully followed.');
+    });
+  }
+
+  public unfollow(pk)
+  {
+    this.http.get(ApiConstants.PROFILE_INTERACTION_UNFOLLOW + '?pk=' + pk).subscribe(result=>{
+      this.notification.showNotification('Sucessfully unfollowed.');
     });
   }
 }

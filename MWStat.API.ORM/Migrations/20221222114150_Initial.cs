@@ -15,9 +15,7 @@ namespace MWStat.API.ORM.Migrations
                 name: "InstagramUser",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Pk = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProfilePicUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -32,7 +30,7 @@ namespace MWStat.API.ORM.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    InstagramUserId = table.Column<int>(type: "int", nullable: false),
+                    InstagramUserId = table.Column<long>(type: "bigint", nullable: false),
                     StampDateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -51,7 +49,7 @@ namespace MWStat.API.ORM.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    InstagramUserId = table.Column<int>(type: "int", nullable: false),
+                    InstagramUserId = table.Column<long>(type: "bigint", nullable: false),
                     AuthToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SessionData = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -72,7 +70,7 @@ namespace MWStat.API.ORM.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     InstagramRunDetailsId = table.Column<int>(type: "int", nullable: false),
-                    InstagramUserId = table.Column<int>(type: "int", nullable: false),
+                    InstagramUserId = table.Column<long>(type: "bigint", nullable: false),
                     RelationToUser = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

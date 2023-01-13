@@ -1,3 +1,4 @@
+import { LoginComponent } from './pages/login/login.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -43,7 +44,7 @@ registerLocaleData(localeRu, 'ru-RU', localeRuExtra);
     AppRoutingModule,
     ToastrModule.forRoot()
   ],
-  declarations: [AppComponent, AdminLayoutComponent],
+  declarations: [AppComponent, AdminLayoutComponent, LoginComponent],
   providers: [
     {provide: LOCALE_ID, useValue: 'ru-RU'},
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}

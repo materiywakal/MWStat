@@ -1,5 +1,4 @@
-﻿using MWStat.API.Domain.Dtos;
-using MWStat.API.Domain.Models;
+﻿using MWStat.API.Domain.Models;
 
 namespace MWStat.API.BusinessServices.Interfaces
 {
@@ -7,5 +6,7 @@ namespace MWStat.API.BusinessServices.Interfaces
     {
         Task<IEnumerable<InstagramAccounts>> GetFollowersAndFollowing(DateTime from, DateTime to);
         Task UpdateFollowersAndFollowing();
+        Task FollowUser(long pk);
+        Task UnfollowUser(long pk);
     }
 }
