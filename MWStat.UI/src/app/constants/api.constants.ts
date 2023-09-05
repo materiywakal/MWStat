@@ -8,6 +8,7 @@ export class ApiConstants {
     public static ACCOUNT_GET_USER_INFO = ApiConstants.ENDPOINT + 'Account/GetUserInfo/';
     public static PROFILE_INTERACTION_FOLLOW = ApiConstants.ENDPOINT + 'ProfileInteraction/Follow';
     public static PROFILE_INTERACTION_UNFOLLOW = ApiConstants.ENDPOINT + 'ProfileInteraction/Unfollow';
+    public static USERS_WHO_NOT_FOLLOWING_BACK = ApiConstants.ENDPOINT + 'Statistic/GetUsersWhoDontFollowBack';
 
     public static RELATION_TYPE = {
         Follower: 0,

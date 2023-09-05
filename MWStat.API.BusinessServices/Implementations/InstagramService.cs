@@ -39,6 +39,34 @@ namespace MWStat.API.BusinessServices.Implementations
             return result;
         }
 
+        public async Task<IEnumerable<InstagramAccount>> GetUsersWhoDontFollowBack()
+        {
+            var accounts = await unitOfWork.InstagramRunDetailsToInstagramUser.Get(o => o.InstagramRunDetailsId == 1);
+            var followings = accounts.Where(a => a.RelationToUser == RelationToUserEnum.Following || a.RelationToUser == RelationToUserEnum.NewFollowing).ToList();
+            var followers = accounts.Where(a => a.RelationToUser == RelationToUserEnum.Follower || a.RelationToUser == RelationToUserEnum.NewFollower).ToList();
+
+            var result = new List<InstagramAccount>();
+
+            foreach (var account in accounts)
+            {
+                if (account.RelationToUser == RelationToUserEnum.Follower || account.RelationToUser == RelationToUserEnum.NewFollower)
+                {
+                    continue;
+                }
+                if (followers.FirstOrDefault(f => f.InstagramUser.Username == account.InstagramUser.Username) == null)
+                {
+                    result.Add(new InstagramAccount
+                    {
+                        Id = account.InstagramUser.Id,
+                        Username = account.InstagramUser.Username,
+                        ProfilePicUrl = account.InstagramUser.ProfilePicUrl,
+                        Relation = RelationToUserEnum.LostFollower
+                    });
+                }
+            }
+            return result;
+        }
+
         public async Task UpdateFollowersAndFollowing()
         {
             var runDetails = await GetCurrentFollowersAndFollowing();

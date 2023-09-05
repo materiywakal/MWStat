@@ -33,6 +33,7 @@ export class StatisticComponent implements OnInit {
   public lostTableEmptyText: string = 'No lost Followers';
   public firstSubDataset: any;
   public secondSubDataset: any;
+  public notFollowingDataset: any;
   public newFollowersDataset:any[][];
   public newFollowingsDataset:any[][];
   public lostFollowersDataset:any[][];
@@ -41,6 +42,7 @@ export class StatisticComponent implements OnInit {
   public currentTimeAreaId: number = 0;
   public currentTimeArea: string;
   public request: Observable<HttpResponse<any>>;
+  public notFollowingBackRequest: Observable<HttpResponse<any>>;
   public range: FormGroup = new FormGroup({
     start: new FormControl(),
     end: new FormControl()
@@ -55,6 +57,12 @@ export class StatisticComponent implements OnInit {
       this.updateChart(result);
     }, error=>{
       this.router.navigate(['/login']);
+    });
+    this.notFollowingBackRequest = this.http.get(ApiConstants.USERS_WHO_NOT_FOLLOWING_BACK);
+    this.notFollowingBackRequest.subscribe(result=> {
+      this.updateNotFollowingBackSection(result);
+    }, error =>{
+      this.notification.showNotification(error);
     });
   }
 
@@ -143,6 +151,11 @@ export class StatisticComponent implements OnInit {
     this.http.get(ApiConstants.STATISTIC_GET_FOLLOWERS_AND_FOLLOWING+'?from='+from+'&to='+to).subscribe(result=>{
       this.updateChart(result);
     });
+  }
+
+  private updateNotFollowingBackSection(result){
+    this.notFollowingDataset = new MatTableDataSource(result.body);
+    this.notFollowingDataset.paginator = this.paginator.toArray()[2];
   }
 
   private updateChart(result) {

@@ -8,5 +8,6 @@ namespace MWStat.API.BusinessServices.Interfaces
         Task UpdateFollowersAndFollowing();
         Task FollowUser(long pk);
         Task UnfollowUser(long pk);
+        Task<IEnumerable<InstagramAccount>> GetUsersWhoDontFollowBack();
     }
 }

@@ -49,5 +49,21 @@ namespace MWStat.API.Controllers
                 return BadRequest("Error occured.");
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsersWhoDontFollowBack()
+        {
+            try
+            {
+                var result = await instagramService.GetUsersWhoDontFollowBack();
+                var jsonResult = JsonConvert.SerializeObject(result);
+
+                return Ok(jsonResult);
+            }
+            catch
+            {
+                return BadRequest("Error occured.");
+            }
+        }
     }
 }

@@ -179,4 +179,64 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-6">
+      <div class=" card">
+        <div class=" card-header">
+          <h4 class="card-title">Not following back</h4>
+          <h6 class="card-title">{{currentTimeArea}}</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" [hidden]="!checkOnSetLength(notFollowingDataset)">
+            <table mat-table [dataSource]="notFollowingDataset" class="table tablesorter">
+              <ng-container matColumnDef="profilePic">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                  <div class=" photo">
+                    <img src="{{element.ProfilePicUrl}}" onError="this.src='assets/img/default-avatar.png'"/>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="username">
+                <th mat-header-cell *matHeaderCellDef>Username</th>
+                <td mat-cell *matCellDef="let element">{{element.Username}}</td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  <div class=" btn-group btn-group-toggle" style="margin-right: 5px;">
+                    <label class=" btn btn-sm btn-danger btn-simple active" (click)="follow(element.Pk);">
+                      <span class=" d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                        Follow
+                      </span>
+                      <span class=" d-block d-sm-none">
+                        <i class=" tim-icons icon-single-02"> </i>
+                      </span>
+                    </label>
+                  </div>
+                  <div class=" btn-group btn-group-toggle">
+                    <label class=" btn btn-sm btn-danger btn-simple active" (click)="unfollow(element.Pk);">
+                      <span class=" d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                        Unfollow
+                      </span>
+                      <span class=" d-block d-sm-none">
+                        <i class=" tim-icons icon-single-02"> </i>
+                      </span>
+                    </label>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [hidePageSize]="true" [pageSize]="10"></mat-paginator>
+          </div>
+          <div [hidden]="checkOnSetLength(firstSubDataset)">
+            <h3 class="text-center">All users follow you back</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
